@@ -1,17 +1,39 @@
 import { Stack, StackProps, Duration } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { aws_lambda as lambda } from 'aws-cdk-lib';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
+import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
+import * as path from 'path';
 
 export class AwsCdkEventbridgeWithLambdaStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    const interval_in_minutes = this.node.tryGetContext('interval_in_minutes');
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'AwsCdkEventbridgeWithLambdaQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    if(typeof interval_in_minutes === 'undefined'){
+      console.log('example: cdk deploy --contxt interval_in_minutes=5');
+      process.exit(1);
+    }
+
+    console.log("interval_in_minutes");
+    console.log(interval_in_minutes);
+
+    const myFunction = new lambda.Function(this, 'function-name', {
+      runtime: lambda.Runtime.NODEJS_16_X,
+      memorySize: 128,
+      timeout: Duration.seconds(30),
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(path.join(__dirname, '/../src')),
+      environment: {
+        interval_in_minutes: interval_in_minutes
+      }
+    })
+
+    const cronRule = new Rule(this, 'CronRule', {
+      schedule: Schedule.expression('cron(0/'+ interval_in_minutes +' * * * ? *)')
+    })
+
+    cronRule.addTarget(new LambdaFunction(myFunction));
   }
 }

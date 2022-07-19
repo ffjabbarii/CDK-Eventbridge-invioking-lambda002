@@ -1,17 +1,11 @@
-// import * as cdk from 'aws-cdk-lib';
-// import { Template } from 'aws-cdk-lib/assertions';
-// import * as AwsCdkEventbridgeWithLambda from '../lib/aws-cdk-eventbridge-with-lambda-stack';
+import * as cdk from 'aws-cdk-lib';
+import { Template } from 'aws-cdk-lib/assertions';
+import * as AwsCdkEventbridgeWithLambdaStack from '../lib/aws-cdk-eventbridge-with-lambda-stack';
 
-// example test. To run these tests, uncomment this file along with the
-// example resource in lib/aws-cdk-eventbridge-with-lambda-stack.ts
-test('SQS Queue Created', () => {
-//   const app = new cdk.App();
-//     // WHEN
-//   const stack = new AwsCdkEventbridgeWithLambda.AwsCdkEventbridgeWithLambdaStack(app, 'MyTestStack');
-//     // THEN
-//   const template = Template.fromStack(stack);
+test('Stack has a lambda function', () => {
+    const app = new cdk.App;
 
-//   template.hasResourceProperties('AWS::SQS::Queue', {
-//     VisibilityTimeout: 300
-//   });
+    const stack = new AwsCdkEventbridgeWithLambdaStack.AwsCdkEventbridgeWithLambdaStack(app, 'MyTestStack')
+
+    Template.fromStack(stack).hasResource("AWS::Lambda::Function", {});
 });
