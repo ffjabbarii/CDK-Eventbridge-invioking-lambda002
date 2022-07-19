@@ -12,7 +12,7 @@ export class AwsCdkEventbridgeWithLambdaStack extends Stack {
     const interval_in_minutes = this.node.tryGetContext('interval_in_minutes');
 
     if(typeof interval_in_minutes === 'undefined'){
-      console.log('example: cdk deploy --contxt interval_in_minutes=5');
+      console.log('example: cdk deploy --context interval_in_minutes=5');
       process.exit(1);
     }
 
