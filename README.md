@@ -1,5 +1,6 @@
 # AWS EventBridge With Lambda
 An EventBridge with a schudled rule that triggers a Lambda function. An environment variable contains the vaule assigned to the interval (in minutes) that the lambda function will run. 
+![Alt Image](./images//Screenshot%202022-07-20%20052025.png)
 
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.
