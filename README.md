@@ -41,6 +41,31 @@ The way you created it was like this:
 $ git remote set-url origin git@github.com:ffjabbari/CDK-Eventbridge-invioking-lambda001.git
 
 DON't FORGET IT.....
+
+
+GOOD COMMANDS:
+
+  902  cd .git
+  903  ls
+  904  cat config
+  905  git remote set-url origin git@github.com:ffjabbari/CDK-Eventbridge-invioking-lambda001.git
+  906  git add .
+  907  cd ..
+  908  git add .
+  909  git status
+  910  git commit -ma"change for this work..."
+  911  git push origin head
+  912  pwd
+  913  git status
+  914  git add .
+  915  git commit -ma"change for this work..."
+  916  git push origin head
+  917  git add .
+  918  git commit -ma"change for this work..."
+  919  git push origin head
+  920  tail history
+╭─fjabbari@fjabbari-4611-mac in ~/REPO_LAMBDA_CDK/aws-cdk-eventbridge-lambda on main ✔ (origin/main)
+╰$ taail -f |history
 END...
 
 
