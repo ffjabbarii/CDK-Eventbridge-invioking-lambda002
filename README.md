@@ -35,6 +35,12 @@ and go to browse cloudeeatach log and do LIVE TAILING.
 ╭─fjabbari@fjabbari-4611-mac in ~/REPO_LAMBDA_CDK/aws-cdk-eventbridge-lambda on main ✔ (origin/main)
 
 
+
+The way you created it was like this:
+
+$ git remote set-url origin git@github.com:ffjabbari/CDK-Eventbridge-invioking-lambda001.git
+
+DON't FORGET IT.....
 END...
 
 
