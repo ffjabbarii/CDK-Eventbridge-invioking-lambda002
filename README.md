@@ -25,6 +25,15 @@ and go to browse cloudeeatach log and do LIVE TAILING.
 
 10.  You will then see your lambda getting executed...
 
+11.  SOURCE FOR THIS IS on your WORK MAC in this dir... VSCODE RAN IT:
+
+/Users/fjabbari/REPO_LAMBDA_CDK/aws-cdk-eventbridge-lambda
+/Users/fjabbari/REPO_LAMBDA_CDK/aws-cdk-eventbridge-lambda
+/Users/fjabbari/REPO_LAMBDA_CDK/aws-cdk-eventbridge-lambda
+
+
+╭─fjabbari@fjabbari-4611-mac in ~/REPO_LAMBDA_CDK/aws-cdk-eventbridge-lambda on main ✔ (origin/main)
+
 
 END...
 
