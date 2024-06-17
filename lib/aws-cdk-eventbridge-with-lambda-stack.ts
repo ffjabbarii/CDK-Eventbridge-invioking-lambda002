@@ -5,6 +5,9 @@ import { Rule, Schedule } from 'aws-cdk-lib/aws-events';
 import { LambdaFunction } from 'aws-cdk-lib/aws-events-targets';
 import {NodejsFunction} from "aws-cdk-lib/aws-lambda-nodejs"
 import * as path from 'path';
+import * as events from '@aws-cdk/aws-events';
+import * as eventsTargets from '@aws-cdk/aws-events-targets'
+
 
 export class AwsCdkEventbridgeWithLambdaStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -32,15 +35,23 @@ export class AwsCdkEventbridgeWithLambdaStack extends Stack {
     })
 
     const cronRule = new Rule(this, 'CronRule', {
-      //schedule: Schedule.expression('cron(0/2 * * * *)')
-      schedule: Schedule.cron({
-        minute: '02',
-        hour: '*',
-        day: '*',
-        month: '*',
-        year: '*',
-    }),
-    })
+      // schedule: Schedule.cron({
+      //   minute: '02',
+      //   hour: '*',
+      //   day: '*',
+      //   month: '*',
+      //   year: '*',
+
+      description: 'Rule for tracking spot instance interruptions',
+      eventPattern: {
+        source: ['aws.ec2'],
+        detailType: ['EC2 Instance State-change Notification'],
+      }});
+      // targets: [new eventsTargets.LambdaFunction(myFunction)],
+      // cronRule.addTarget(new eventsTargets.LambdaFunction(myFunction));
+    // });
+    // }),
+    // })
 
     cronRule.addTarget(new LambdaFunction(myFunction));
   }

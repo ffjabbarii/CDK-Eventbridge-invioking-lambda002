@@ -1,5 +1,7 @@
 
-KEEP-LINK : https://keep.google.com/u/1/#NOTE/15F_AgDMyIZm5UDXZBD__JX-LKFxDtIf4kc8a6sh-DBCLwPUbsf7kwcwvYLdahg
+Now Fred, this one is different thatn lambda001... lambda002 does ec2 start stop, and automatically addes rules....
+
+KEEP-LINK : https://keep.google.com/u/1/#NOTE/1KTMgZIgyyiJQV0aC6UFaTidbeElAbc9jhToZeg5Ioi6XW8IS9WJML-sabcGGt9I
 FRED, this works perfectly:
 1. npm i
 
