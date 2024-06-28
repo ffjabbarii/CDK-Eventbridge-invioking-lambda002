@@ -1,12 +1,11 @@
 import { Handler } from 'aws-lambda';
 import { CodeDeploy } from 'aws-sdk';
-//import { LambdaClient, TagResourceCommand, TagResourceCommandInput, TagResourceRequest} from "@aws-sdk/client-lambda";
-//import { LambdaClient, TagResourceCommand, ListLayersCommand } from "@aws-sdk/client-lambda";
+
 import { ResourceGroupsTaggingAPIClient, TagResourcesCommand } from "@aws-sdk/client-resource-groups-tagging-api"; 
 
 export const handler: Handler = async (event, context): Promise<void> => {
 
-	console.log('Hello2....................event json ......................B0f', event);
+	console.log('Hello2....................event json .......................B0f', event);
 	const codedeploy = new CodeDeploy({apiVersion: '2014-10-06'});
 	console.log('codedeploy: ', codedeploy);
 
@@ -48,10 +47,13 @@ export const handler: Handler = async (event, context): Promise<void> => {
 	const input3 : any = { 
 	    ResourceARNList: event.resources, 
 		Tags: 
-		  { 
-			Key: 'key003',
-			Value: 'FredJabbari003',
-		  },
+			{ 
+			     ttl: '60000',
+			     purge: 'no',
+			     productionReady: 'no',
+			     owner: 'Config',
+				 costCenter: '001',
+			}
 	};
 
 	console.log('Hello2c....................event json ......................E4f', input3); 
