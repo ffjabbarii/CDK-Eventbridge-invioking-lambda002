@@ -26,6 +26,7 @@
     "@aws-cdk/aws-events-targets": "^1.204.0",
     "@aws-cdk/core": "^1.204.0",
     "@aws-sdk/client-lambda": "^3.600.0",
+    "@aws-sdk/client-resource-groups": "^3.609.0",
     "@aws-sdk/client-resource-groups-tagging-api": "^3.600.0",
     "aws-cdk-lib": "2.146.0",
     "aws-sdk": "^2.1649.0",

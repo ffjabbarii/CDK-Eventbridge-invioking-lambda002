@@ -1,81 +1,75 @@
 import { Handler } from 'aws-lambda';
-import { CodeDeploy } from 'aws-sdk';
+// import { CodeDeploy } from 'aws-sdk';
 
 import { ResourceGroupsTaggingAPIClient, TagResourcesCommand } from "@aws-sdk/client-resource-groups-tagging-api"; 
+import { ResourceGroupsClient, GetGroupCommand, GetTagsCommand } from "@aws-sdk/client-resource-groups"; 
 
 export const handler: Handler = async (event, context): Promise<void> => {
 
-	console.log('Hello2....................event json .......................B0f', event);
-	const codedeploy = new CodeDeploy({apiVersion: '2014-10-06'});
-	console.log('codedeploy: ', codedeploy);
-
-	console.log('Hello2a....................event json ......................B1f', event);
 	console.log(JSON.stringify(event, null, 2));
-	console.log('Hello2b....................event json ......................E2f', event);
-	console.log(event.resources[0]);
-	console.log('Hello2c....................event json ......................E3f', event);
-
-	const client3 = new ResourceGroupsTaggingAPIClient({ region: "us-east-1" });
+	const client6 = new ResourceGroupsTaggingAPIClient({ region: "us-east-1" });
+	const client4 = new ResourceGroupsClient({ region: "us-east-1" });
 	
-
-	//const client = new LambdaClient({ region: "us-east-1" });
-
-	const params : any = {
-		Resource: event.resources[0],
-		Tags: [{ key: 'NAMEE', value: 'DERF-IRABBAAJ'}],
+	const input4 : any = { 
+	    GroupName: 'config001'
 	};
+	console.log('LOG:', input4); 
+
 	
-	const input1 : any = { 
-	    Resource: event.detail['instance-id'], 
-		Tags: 
-		  { 
-			Key: 'key001',
-			Value: 'FredJabbari001',
-		  },
-	  };
+	const command4 = new GetGroupCommand(input4);
 
-	const input2 :any = { 
-	ResourceArn: event.resources[0], 
-	Tags: [
-		{ 
-		Key: 'FredJabbari001',
-		Value: 'DERF-IRABBAAJ',
-		},
-	],
-	};
-
-	const input3 : any = { 
-	    ResourceARNList: event.resources, 
-		Tags: 
-			{ 
-			     ttl: '60000',
-			     purge: 'no',
-			     productionReady: 'no',
-			     owner: 'Config',
-				 costCenter: '001',
-			}
-	};
-
-	console.log('Hello2c....................event json ......................E4f', input3); 
-
-	//const command = new ListLayersCommand(input2);
-
-	//const command = new TagResourceCommand(input1);
-
-	const command = new TagResourcesCommand(input3);
-
+	let data4 : any = null;
+    let data5 : any = null;
+	let data6 : any = null;
 	try {
-		const data = await client3.send(command);
-		// process data.
-	  } catch (error) {
-		// error handling.
-		console.log('Hello2c....................TRY ERROR4f************************', error);
-	  } finally {
-		// finally.
-		console.log('Hello2c....................TRY FINALLY3f**********************');
-	  }
-	console.log(event.resources[0]);
-	console.log('Hello2d....................event json ......................E4f', event);
+		data4 = await client4.send(command4);
+		console.log('LOG:SUCCESSInput4B');
+		console.log(JSON.stringify(data4, null, 2));
+		console.log('LOG:SUCCESSInput4E', data4.Group.GroupArn);
+		try {
+			const input5 : any = {
+				Arn: data4.Group.GroupArn
+			}
+			const command5 = new GetTagsCommand(input5);
+			data5 = await client4.send(command5);
+			console.log('LOG:SUCCESSInput5B');
+			console.log(JSON.stringify(data5, null, 2));
+			console.log('LOG:SUCCESSInput5E');
+			try {
+				const input6 : any = { 
+					ResourceARNList: event.resources, 
+					Tags: data5.Tags
+				};
+				const command6 = new TagResourcesCommand(input6);
+				data6 = await client6.send(command6);
+				console.log('LOG:SUCCESSInput6B');
+				console.log(JSON.stringify(data6, null, 2));
+				console.log('LOG:SUCCESSInput6E');
+
+			} catch (error) {
+				console.log('LOG: ERRORInput6', error);
+			} finally {
+		
+				console.log('LOG:SUCCESSInput6FinallyB');
+				console.log(JSON.stringify(data6, null, 2));
+				console.log('LOG:SUCCESSInput6FinallyE');
+		
+			}
+		} catch (error) {
+			console.log('LOG: ERRORInput5', error);
+		} finally {
+
+			console.log('LOG:SUCCESSInput5FinallyB');
+			console.log(JSON.stringify(data5, null, 2));
+			console.log('LOG:SUCCESSInput5FinallyE');
+
+		}
+	} catch (error) {
+		console.log('LOG: ERROR', error);
+	} finally {
+		console.log('LOG:SUCCESSInput4FinallyB');
+		console.log(JSON.stringify(data4, null, 2));
+		console.log('LOG:SUCCESSInput4FinallyE');
+	}
 	await new Promise(resolve => setTimeout(resolve, 1000));
-	console.log('Goodbye2!');
 };
