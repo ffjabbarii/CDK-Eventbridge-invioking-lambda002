@@ -5,7 +5,7 @@ import { ResourceGroupsTaggingAPIClient, TagResourcesCommand, GetResourcesComman
 import { ResourceGroupsClient, GetGroupCommand, GetTagsCommand } from "@aws-sdk/client-resource-groups"; 
 import { OrganizationsClient, ListTagsForResourceCommand  } from "@aws-sdk/client-organizations"; 
 import { LambdaClient, ListTagsCommand } from "@aws-sdk/client-lambda";
-import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
+
 
 
 export const handler: Handler = async (event, context): Promise<void> => {
@@ -14,10 +14,7 @@ export const handler: Handler = async (event, context): Promise<void> => {
 	let data4 : any = null;
     let data5 : any = null;
 	let data6 : any = null;
-	let data7 : any = null;
-	let data8 : any = null;
 	console.log(JSON.stringify(event, null, 2));
-	const client7 = new SSMClient({ region: "us-east-1" });
 	const client1 = new ResourceGroupsTaggingAPIClient({ region: "us-east-1" });
 	const client6 = new ResourceGroupsTaggingAPIClient({ region: "us-east-1" });
 	const client4 = new ResourceGroupsClient({ region: "us-east-1" });
@@ -25,28 +22,7 @@ export const handler: Handler = async (event, context): Promise<void> => {
 	console.log('LOG:SUCCESSInput0FinallyB');
 	console.log(JSON.stringify(event, null, 2));
 	console.log('LOG:SUCCESSInput0FinallyE');
-   
-	//********************************************************************************* */
-	try {
-		const input8 : any = { 
-			Name: '/Facts/Facts001' 
-		};
-		const command8 = new GetParameterCommand(input8);
-		data8 = await client7.send(command8);
-		console.log('LOG:SUCCESSInput8B');
-		console.log(JSON.stringify(data8, null, 2));
-		console.log('LOG:SUCCESSInput8E');
 
-	} catch (error) {
-		console.log('LOG: ERRORInput8', error);
-	} finally {
-
-		console.log('LOG:SUCCESSInput8FinallyB');
-		console.log(JSON.stringify(data8, null, 2));
-		console.log('LOG:SUCCESSInput8FinallyE');
-
-	}
-	//********************************************************************************* */
 	const input1 : any = {
 		ResourceARNList: event.resources
 	}
@@ -126,27 +102,6 @@ export const handler: Handler = async (event, context): Promise<void> => {
 				console.log('LOG:SUCCESSInput6FinallyE');
 		
 			}
-			//********************************************************************************* */
-			try {
-				const input7 : any = { 
-					Name: '/Facts/Facts001' 
-				};
-				const command7 = new GetParameterCommand(input7);
-				data7 = await client7.send(command7);
-				console.log('LOG:SUCCESSInput7B');
-				console.log(JSON.stringify(data7, null, 2));
-				console.log('LOG:SUCCESSInput7E');
-
-			} catch (error) {
-				console.log('LOG: ERRORInput7', error);
-			} finally {
-		
-				console.log('LOG:SUCCESSInput7FinallyB');
-				console.log(JSON.stringify(data7, null, 2));
-				console.log('LOG:SUCCESSInput7FinallyE');
-		
-			}
-			//********************************************************************************* */
 		} catch (error) {
 			console.log('LOG: ERRORInput5', error);
 		} finally {
