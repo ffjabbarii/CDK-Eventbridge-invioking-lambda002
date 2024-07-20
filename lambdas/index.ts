@@ -54,13 +54,21 @@ export const handler: Handler = async (event, context): Promise<void> => {
 	console.log(JSON.stringify(input1, null, 2));
 	console.log('LOG:Input0E');
 	const command1 = new GetResourcesCommand(input1);
-	let groupName = null;
+	let groupName = 'group999';
+	let subGroupName = 'subgroup999';
+	let envName = 'env999';
+	let aryGroupInput = null;
 	try {
 		data1 = await client1.send(command1);
+	    console.log('LOG:Input00B');
+	    console.log(JSON.stringify(data1, null, 2));
+	    console.log('LOG:Input00E');
 		let tags = findKeyDeep(data1, 'Tags');
 		let keyx = null;
-		let valuex = null;
-		groupName = "default001";
+		let valuex: any = null;
+		groupName = "group999";
+		subGroupName = "subgroup999";
+		envName = "env999";
 		for (let prop in tags){
 			keyx = prop;
 			valuex = tags[keyx]; 
@@ -70,8 +78,13 @@ export const handler: Handler = async (event, context): Promise<void> => {
 			valuex = Object.values(valuex)[1];
 
 			if (keyx === 'GroupName'){
-				groupName = valuex;
-				console.log('------------------------------------1>', groupName);
+				aryGroupInput = valuex.split('.');
+				groupName = aryGroupInput[0];
+				subGroupName = aryGroupInput[1];
+				envName = aryGroupInput[2];
+				console.log('------------------------------------1.1>', groupName);
+				console.log('------------------------------------1.2>', subGroupName);
+				console.log('------------------------------------1.3>', envName);
 			}
 			console.log('------------------------------------3>', groupName);
 		}
