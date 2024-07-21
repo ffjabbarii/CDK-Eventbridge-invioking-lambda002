@@ -1,4 +1,5 @@
 import { Handler } from 'aws-lambda';
+import { plainToClass } from "class-transformer";
 // import { CodeDeploy } from 'aws-sdk';
 
 import { ResourceGroupsTaggingAPIClient, TagResourcesCommand, GetResourcesCommand } from "@aws-sdk/client-resource-groups-tagging-api"; 
@@ -6,6 +7,57 @@ import { ResourceGroupsClient, GetGroupCommand, GetTagsCommand } from "@aws-sdk/
 import { OrganizationsClient, ListTagsForResourceCommand  } from "@aws-sdk/client-organizations"; 
 import { LambdaClient, ListTagsCommand } from "@aws-sdk/client-lambda";
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
+
+const jsonData: any = 
+{"tagNames": "v1.1", "owner": "fjabbari@emoneyadvisor.com",  "costCenter": "cost001", 
+"creationDate": 2024100, "businessUnit":  "unit001", "timeToReport": "weekly", 
+"environment": "nonprod", "team": "factsDev", "appName": "factsCreation", "productionReady": "no"};
+
+
+class Tags {
+    tagNames: string | undefined;
+    owner: string | undefined;
+    costCenter: string | undefined;
+    creationDate: number |undefined;
+    businessUnit: string | undefined;
+    timeToReport: string | undefined;
+    environment: string | undefined;
+    team: string | undefined;
+    appName: string | undefined;
+    productionReady: string | undefined;
+
+    getTagNames() {
+        return this.tagNames;
+    }
+    getOwner() {
+        return this.owner;
+    }
+    getCreationDate() {
+        return this.creationDate;
+    }
+    getBusinessUnit() {
+        return this.businessUnit;
+    }
+    getTimeToReport() {
+        return this.timeToReport;
+    }
+    getEnvironment() {
+        return this.environment;
+    }
+    getTeam() {
+        return this.team;
+    }
+    getAppName() {
+        try {
+             return this.appName;
+        }catch{
+            console.log("...");
+        }
+    }
+    getProductionReady() {
+        return this.productionReady;
+    }
+}
 
 
 export const handler: Handler = async (event, context): Promise<void> => {
@@ -25,7 +77,33 @@ export const handler: Handler = async (event, context): Promise<void> => {
 	console.log('LOG:SUCCESSInput0FinallyB');
 	console.log(JSON.stringify(event, null, 2));
 	console.log('LOG:SUCCESSInput0FinallyE');
-   
+
+	//********************************************************************************* */
+	let newTags = plainToClass(Tags, jsonData);
+	console.log("1111111111111");
+	console.log(newTags);
+	console.log("2222222222222");
+	console.log(newTags.getAppName());
+	console.log("3333333333333");
+	let jsonStringified = JSON.stringify(newTags);
+	console.log(jsonStringified);
+	console.log("4444444444444");
+	let jsonEscaped = JSON.stringify(jsonStringified);
+	console.log(jsonEscaped);
+	console.log("5555555555555");
+	let jsonObj = JSON.parse(jsonEscaped);
+	let jsonObjj = JSON.parse(jsonObj);
+	console.log(jsonObj);
+	console.log("6666666666666");
+	console.log(newTags.appName);
+	console.log(newTags.getAppName());
+	console.log("7777777777777");
+	console.log(jsonObjj.appName); //Good Fred, always double parse an escape json... and even then do not use the getter for it...
+	//console.log(jsonObjj.getAppName()); //when you convert a Eacape json to JsonObj, it loses its getters.... Just use it without getter...
+	console.log("8888888888888");
+	//console.log(jsonObj.appName); //you have to double jsonParse an escape json string to get it to work right...
+	//console.log(jsonObj.getAppName()); //when you convert a Eacape json to JsonObj, it loses its getters.... Just use it without getter...
+	console.log("9999999999999");
 	//********************************************************************************* */
 	try {
 		const input8 : any = { 

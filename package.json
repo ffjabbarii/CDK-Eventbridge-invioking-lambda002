@@ -34,7 +34,9 @@
     "@aws-sdk/client-ssm": "^3.616.0",
     "aws-cdk-lib": "2.146.0",
     "aws-sdk": "^2.1649.0",
+    "class-transformer": "^0.5.1",
     "constructs": "^10.3.0",
+    "reflect-metadata": "^0.2.2",
     "source-map-support": "^0.5.21"
   }
 }
