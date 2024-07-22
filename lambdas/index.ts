@@ -10,21 +10,22 @@ import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 
 const jsonData: any = 
 {"tagNames": "v1.1", "owner": "fjabbari@emoneyadvisor.com",  "costCenter": "cost001", 
-"creationDate": 2024100, "businessUnit":  "unit001", "timeToReport": "weekly", 
-"environment": "nonprod", "team": "factsDev", "appName": "factsCreation", "productionReady": "no"};
-
+"creationDate": "2024100", "businessUnit":  "unit001", "timeToReport": "weekly", 
+"environment": "STAGING", "team": "factsDev", "appName": "factsCreation", "productionReady": "no", "accountName": "NON-PROD", "accountValue": "XXXXXXXXXX"};
 
 class Tags {
     tagNames: string | undefined;
     owner: string | undefined;
     costCenter: string | undefined;
-    creationDate: number |undefined;
+    creationDate: string |undefined;
     businessUnit: string | undefined;
     timeToReport: string | undefined;
     environment: string | undefined;
     team: string | undefined;
     appName: string | undefined;
     productionReady: string | undefined;
+	accountName: string | undefined;
+	accountValue: string | undefined;
 
     getTagNames() {
         return this.tagNames;
@@ -48,14 +49,16 @@ class Tags {
         return this.team;
     }
     getAppName() {
-        try {
-             return this.appName;
-        }catch{
-            console.log("...");
-        }
+        return this.appName;
     }
     getProductionReady() {
         return this.productionReady;
+    }
+	getAccountName() {
+        return this.accountName;
+    }
+	getAccountValue() {
+        return this.accountValue;
     }
 }
 
@@ -68,6 +71,7 @@ export const handler: Handler = async (event, context): Promise<void> => {
 	let data6 : any = null;
 	let data7 : any = null;
 	let data8 : any = null;
+	let data8Obj : any = null;
 	console.log(JSON.stringify(event, null, 2));
 	const client7 = new SSMClient({ region: "us-east-1" });
 	const client1 = new ResourceGroupsTaggingAPIClient({ region: "us-east-1" });
@@ -101,29 +105,11 @@ export const handler: Handler = async (event, context): Promise<void> => {
 	console.log(jsonObjj.appName); //Good Fred, always double parse an escape json... and even then do not use the getter for it...
 	//console.log(jsonObjj.getAppName()); //when you convert a Eacape json to JsonObj, it loses its getters.... Just use it without getter...
 	console.log("8888888888888");
+	console.log("N/A");
 	//console.log(jsonObj.appName); //you have to double jsonParse an escape json string to get it to work right...
 	//console.log(jsonObj.getAppName()); //when you convert a Eacape json to JsonObj, it loses its getters.... Just use it without getter...
 	console.log("9999999999999");
 	//********************************************************************************* */
-	try {
-		const input8 : any = { 
-			Name: '/Facts/Facts001' 
-		};
-		const command8 = new GetParameterCommand(input8);
-		data8 = await client7.send(command8);
-		console.log('LOG:SUCCESSInput8B');
-		console.log(JSON.stringify(data8, null, 2));
-		console.log('LOG:SUCCESSInput8E');
-
-	} catch (error) {
-		console.log('LOG: ERRORInput8', error);
-	} finally {
-
-		console.log('LOG:SUCCESSInput8FinallyB');
-		console.log(JSON.stringify(data8, null, 2));
-		console.log('LOG:SUCCESSInput8FinallyE');
-
-	}
 	//********************************************************************************* */
 	const input1 : any = {
 		ResourceARNList: event.resources
@@ -175,6 +161,27 @@ export const handler: Handler = async (event, context): Promise<void> => {
 		console.log('LOG:SUCCESSInput1FinallyE');
 
 	} 
+	/************************************************************************************* */
+	try {
+		const input8 : any = { 
+			Name: '/' + groupName + '/' + subGroupName 
+		};
+		const command8 = new GetParameterCommand(input8);
+		data8 = await client7.send(command8);
+		console.log('LOG:SUCCESSInput8B');
+		console.log(JSON.stringify(data8, null, 2));
+		console.log('LOG:SUCCESSInput8E');
+
+	} catch (error) {
+		console.log('LOG: ERRORInput8', error);
+	} finally {
+
+		console.log('LOG:SUCCESSInput8FinallyB');
+		console.log(JSON.stringify(data8, null, 2));
+		console.log('LOG:SUCCESSInput8FinallyE');
+
+	}
+	/************************************************************************************** */
 	const input4 : any = { 
 	    GroupName: groupName
 	};
@@ -184,11 +191,16 @@ export const handler: Handler = async (event, context): Promise<void> => {
 	const command4 = new GetGroupCommand(input4);
 
 	try {
-		data4 = await client4.send(command4);
+		data4 = await client4.send(command4); //THIS IS WHERE WE USED TO GET TAG NAMES AND VALUES but we do not need the values any more, 
+		//                                    //ALL we need in the fture to validate Facts.Fact001 from here.  I do this code later...
 		console.log('LOG:SUCCESSInput4B');
 		console.log(JSON.stringify(data4, null, 2));
 		console.log('LOG:SUCCESSInput4E', data4.Group.GroupArn);
 		try {
+			//SEE FRED, you do not need to get the tagvalues from Resource Group as you no longer have it there, so get it from Tags class now instead...
+			//** So now Fred this call gets the groupName and finds subGroupName.  This call is still fine.  All you do after this call later on is: */
+			//** All you do later make sure SubGroupName is valid too and matches's Terraform's input, and also from here, get the Get the Tags which  */
+			//** happens to be the Tagnames ( Names only), and validate that and use its version number too ... Good.  Thanks to myself... */
 			const input5 : any = {
 				Arn: data4.Group.GroupArn
 			}
@@ -197,10 +209,27 @@ export const handler: Handler = async (event, context): Promise<void> => {
 			console.log('LOG:SUCCESSInput5B');
 			console.log(JSON.stringify(data5, null, 2));
 			console.log('LOG:SUCCESSInput5E');
+			//**** NOW I DO have the TAG VALUE OBJECT called Tags from SSM Parameter Store, so I use it here... */
+			//** BEGIN ***************************************************************************************** */
 			try {
+			    console.log('LOG:SUCCESSInput6BB4');
+				//data8Obj = JSON.stringify(data8, null, 2);
+			    //data8Obj.environment = envName;
+			    data8.environment = envName;
+				let tagsFromSsm0 = findKeyDeep(data8, 'Value');
+			    console.log('LOG:SUCCESSInput6BB4a');
+			    console.log(tagsFromSsm0);
+			    console.log('LOG:SUCCESSInput6BB5');
+				let newTags2 = plainToClass(Tags, tagsFromSsm0);
+			    console.log('LOG:SUCCESSInput6BB8');
+			    console.log(newTags2, null, 2);
+			    console.log('LOG:SUCCESSInput6EE');
 				const input6 : any = { 
 					ResourceARNList: event.resources, 
-					Tags: data5.Tags
+					Tags: newTags
+					//Tags: jsonObjj              //** This was good but it came from hardcoded JSON above... No longer needed... */
+					//Tags: data5.Tags           //** Fred this is good but use the Tags varialble from Resoruce Group to get Tagsnames and version # */
+					//** I use this later on But this code is good too.............................................................................. */
 				};
 				const command6 = new TagResourcesCommand(input6);
 				data6 = await client6.send(command6);
@@ -220,7 +249,7 @@ export const handler: Handler = async (event, context): Promise<void> => {
 			//********************************************************************************* */
 			try {
 				const input7 : any = { 
-					Name: '/Facts/Facts001' 
+					Name: '/' + groupName + '/' + subGroupName 
 				};
 				const command7 = new GetParameterCommand(input7);
 				data7 = await client7.send(command7);
