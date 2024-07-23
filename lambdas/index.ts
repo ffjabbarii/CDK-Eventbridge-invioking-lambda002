@@ -9,7 +9,7 @@ import { LambdaClient, ListTagsCommand } from "@aws-sdk/client-lambda";
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 
 const jsonData: any = 
-{"tagNames": "v1.1", "owner": "fjabbari@emoneyadvisor.com",  "costCenter": "cost001", 
+{"tagNames": "v1.1", "ownder": "fjabbari@emoneyadvisor.com",  "costCenter": "cost001", 
 "creationDate": "2024100", "businessUnit":  "unit001", "timeToReport": "weekly", 
 "environment": "STAGING", "team": "factsDev", "appName": "factsCreation", "productionReady": "no", "accountName": "NON-PROD", "accountValue": "XXXXXXXXXX"};
 
@@ -72,6 +72,8 @@ export const handler: Handler = async (event, context): Promise<void> => {
 	let data7 : any = null;
 	let data8 : any = null;
 	let data8Obj : any = null;
+	let newTags2 : any = null; 
+	let newTags2Obj : any = null; 
 	console.log(JSON.stringify(event, null, 2));
 	const client7 = new SSMClient({ region: "us-east-1" });
 	const client1 = new ResourceGroupsTaggingAPIClient({ region: "us-east-1" });
@@ -83,32 +85,32 @@ export const handler: Handler = async (event, context): Promise<void> => {
 	console.log('LOG:SUCCESSInput0FinallyE');
 
 	//********************************************************************************* */
-	let newTags = plainToClass(Tags, jsonData);
-	console.log("1111111111111");
-	console.log(newTags);
-	console.log("2222222222222");
-	console.log(newTags.getAppName());
-	console.log("3333333333333");
-	let jsonStringified = JSON.stringify(newTags);
-	console.log(jsonStringified);
-	console.log("4444444444444");
-	let jsonEscaped = JSON.stringify(jsonStringified);
-	console.log(jsonEscaped);
-	console.log("5555555555555");
-	let jsonObj = JSON.parse(jsonEscaped);
-	let jsonObjj = JSON.parse(jsonObj);
-	console.log(jsonObj);
-	console.log("6666666666666");
-	console.log(newTags.appName);
-	console.log(newTags.getAppName());
-	console.log("7777777777777");
-	console.log(jsonObjj.appName); //Good Fred, always double parse an escape json... and even then do not use the getter for it...
-	//console.log(jsonObjj.getAppName()); //when you convert a Eacape json to JsonObj, it loses its getters.... Just use it without getter...
-	console.log("8888888888888");
-	console.log("N/A");
-	//console.log(jsonObj.appName); //you have to double jsonParse an escape json string to get it to work right...
-	//console.log(jsonObj.getAppName()); //when you convert a Eacape json to JsonObj, it loses its getters.... Just use it without getter...
-	console.log("9999999999999");
+	// let newTags = plainToClass(Tags, jsonData);
+	// console.log("1111111111111");
+	// console.log(newTags);
+	// console.log("2222222222222");
+	// console.log(newTags.getAppName());
+	// console.log("3333333333333");
+	// let jsonStringified = JSON.stringify(newTags);
+	// console.log(jsonStringified);
+	// console.log("4444444444444");
+	// let jsonEscaped = JSON.stringify(jsonStringified);
+	// console.log(jsonEscaped);
+	// console.log("5555555555555");
+	// let jsonObj = JSON.parse(jsonEscaped);
+	// let jsonObjj = JSON.parse(jsonObj);
+	// console.log(jsonObj);
+	// console.log("6666666666666");
+	// console.log(newTags.appName);
+	// console.log(newTags.getAppName());
+	// console.log("7777777777777");
+	// console.log(jsonObjj.appName); //Good Fred, always double parse an escape json... and even then do not use the getter for it...
+	// //console.log(jsonObjj.getAppName()); //when you convert a Eacape json to JsonObj, it loses its getters.... Just use it without getter...
+	// console.log("8888888888888");
+	// console.log("N/A");
+	// //console.log(jsonObj.appName); //you have to double jsonParse an escape json string to get it to work right...
+	// //console.log(jsonObj.getAppName()); //when you convert a Eacape json to JsonObj, it loses its getters.... Just use it without getter...
+	// console.log("9999999999999");
 	//********************************************************************************* */
 	//********************************************************************************* */
 	const input1 : any = {
@@ -169,7 +171,7 @@ export const handler: Handler = async (event, context): Promise<void> => {
 		const command8 = new GetParameterCommand(input8);
 		data8 = await client7.send(command8);
 		console.log('LOG:SUCCESSInput8B');
-		console.log(JSON.stringify(data8, null, 2));
+		console.log(data8);
 		console.log('LOG:SUCCESSInput8E');
 
 	} catch (error) {
@@ -177,7 +179,7 @@ export const handler: Handler = async (event, context): Promise<void> => {
 	} finally {
 
 		console.log('LOG:SUCCESSInput8FinallyB');
-		console.log(JSON.stringify(data8, null, 2));
+		console.log(data8);
 		console.log('LOG:SUCCESSInput8FinallyE');
 
 	}
@@ -214,19 +216,21 @@ export const handler: Handler = async (event, context): Promise<void> => {
 			try {
 			    console.log('LOG:SUCCESSInput6BB4');
 				//data8Obj = JSON.stringify(data8, null, 2);
-			    //data8Obj.environment = envName;
-			    data8.environment = envName;
+				console.log(data8);
 				let tagsFromSsm0 = findKeyDeep(data8, 'Value');
-			    console.log('LOG:SUCCESSInput6BB4a');
-			    console.log(tagsFromSsm0);
-			    console.log('LOG:SUCCESSInput6BB5');
-				let newTags2 = plainToClass(Tags, tagsFromSsm0);
+			    console.log('LOG:SUCCESSInput6BB4a0');
+			    console.log(Tags);
+			    console.log('LOG:SUCCESSInput6BB4aa');
+				newTags2 = plainToClass(Tags, tagsFromSsm0);
+
 			    console.log('LOG:SUCCESSInput6BB8');
-			    console.log(newTags2, null, 2);
+			    console.log(newTags2);
 			    console.log('LOG:SUCCESSInput6EE');
+				newTags2Obj = JSON.parse(newTags2);
+				newTags2Obj.environment = envName;
 				const input6 : any = { 
 					ResourceARNList: event.resources, 
-					Tags: newTags
+					Tags: newTags2Obj
 					//Tags: jsonObjj              //** This was good but it came from hardcoded JSON above... No longer needed... */
 					//Tags: data5.Tags           //** Fred this is good but use the Tags varialble from Resoruce Group to get Tagsnames and version # */
 					//** I use this later on But this code is good too.............................................................................. */
