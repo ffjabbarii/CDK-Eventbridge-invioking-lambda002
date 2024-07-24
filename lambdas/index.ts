@@ -7,6 +7,7 @@ import { ResourceGroupsClient, GetGroupCommand, GetTagsCommand } from "@aws-sdk/
 import { OrganizationsClient, ListTagsForResourceCommand  } from "@aws-sdk/client-organizations"; 
 import { LambdaClient, ListTagsCommand } from "@aws-sdk/client-lambda";
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
+import { int } from 'aws-sdk/clients/datapipeline';
 
 const jsonData: any = 
 {"tagNames": "v1.1", "ownder": "fjabbari@emoneyadvisor.com",  "costCenter": "cost001", 
@@ -228,6 +229,33 @@ export const handler: Handler = async (event, context): Promise<void> => {
 			    console.log('LOG:SUCCESSInput6EE');
 				newTags2Obj = JSON.parse(newTags2);
 				newTags2Obj.environment = envName;
+				console.log("newTags2Obj==>", newTags2Obj);
+				let stry = newTags2Obj.accountValue.replaceAll('.', '#');
+				let accountValuex = stry.split('#');
+				let actionCasex = accountValuex[1];
+				let actionNumberOfTags = accountValuex[2]; 
+				console.log("actionCasex==>", actionCasex);
+				console.log("actionNumberOfTags==>", actionNumberOfTags);
+
+			    if (actionCasex === '1'){
+					console.log("actionx==1>", actionCasex);
+					newTags2Obj.appName = newTags2Obj.appName.toLowerCase();
+				} else if (actionCasex === '2'){
+					console.log("actionx==2>", actionCasex);
+					newTags2Obj.appName = newTags2Obj.appName.toUpperCase();
+				} else {
+					actionCasex = '3';
+
+					newTags2Obj.appName = newTags2Obj.appName.toLowerCase();
+					let strx1 = newTags2Obj.appName.split('');
+					strx1[0] = strx1[0].toUpperCase();
+					strx1[5] = strx1[5].toUpperCase();
+					newTags2Obj.appName = strx1.join("");
+
+					console.log("actionx==3>", actionCasex);
+					console.log("accountValue==3>", newTags2Obj.accountValue);
+				}
+
 				const input6 : any = { 
 					ResourceARNList: event.resources, 
 					Tags: newTags2Obj
@@ -299,4 +327,11 @@ function findKeyDeep(obj: any, key: any){
 	  }
 	}
 	return undefined;
+}
+function replaceChar(origString: any, replaceChar: any, index: int) {
+    let firstPart = origString.substr(0, index);
+    let lastPart = origString.substr(index + 1);
+      
+    let newString = firstPart + replaceChar + lastPart;
+    return newString;
 }
